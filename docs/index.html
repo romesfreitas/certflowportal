@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CertFlow - Portal de Administração</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-certificate"></i>
+                <h1>CertFlow Admin</h1>
+            </div>
+            <div class="admin-info">
+                <i class="fas fa-user-shield"></i>
+                <span>Administrador</span>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="dashboard-cards">
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Clientes</h3>
+                        <p class="card-number" id="totalClients">0</p>
+                        <small>Total de clientes</small>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Tokens Ativos</h3>
+                        <p class="card-number" id="activeTokens">0</p>
+                        <small>Tokens válidos</small>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Uso Hoje</h3>
+                        <p class="card-number" id="todayUsage">0</p>
+                        <small>Requisições</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção de Clientes -->
+            <section class="content-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-users"></i> Gerenciar Clientes</h2>
+                    <button class="btn btn-primary" onclick="showNewClientModal()">
+                        <i class="fas fa-plus"></i> Novo Cliente
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Empresa</th>
+                                <th>Email</th>
+                                <th>Token Atual</th>
+                                <th>Expira em</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientsTableBody">
+                            <!-- Dados serão inseridos via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Seção de Tokens -->
+            <section class="content-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-key"></i> Histórico de Tokens</h2>
+                    <button class="btn btn-secondary" onclick="refreshTokens()">
+                        <i class="fas fa-sync-alt"></i> Atualizar
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Token (Parcial)</th>
+                                <th>Cliente</th>
+                                <th>Criado em</th>
+                                <th>Expira em</th>
+                                <th>Último Uso</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tokensTableBody">
+                            <!-- Dados serão inseridos via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal para Novo Cliente -->
+    <div id="newClientModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-plus"></i> Novo Cliente</h3>
+                <span class="close" onclick="closeModal('newClientModal')">&times;</span>
+            </div>
+            <form id="newClientForm">
+                <div class="form-group">
+                    <label for="companyName">Nome da Empresa:</label>
+                    <input type="text" id="companyName" name="companyName" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email de Contato:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="tokenExpiry">Validade do Token (dias):</label>
+                    <select id="tokenExpiry" name="tokenExpiry">
+                        <option value="30">30 dias</option>
+                        <option value="90" selected>90 dias</option>
+                        <option value="180">180 dias</option>
+                        <option value="365">1 ano</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('newClientModal')">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Criar Cliente
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para Mostrar Token -->
+    <div id="tokenModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-key"></i> Token Gerado</h3>
+                <span class="close" onclick="closeModal('tokenModal')">&times;</span>
+            </div>
+            <div class="token-display">
+                <p><strong>Token para o cliente:</strong></p>
+                <div class="token-box">
+                    <code id="generatedToken"></code>
+                    <button class="btn-copy" onclick="copyToken()" title="Copiar Token">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+                <div class="token-info">
+                    <p><i class="fas fa-info-circle"></i> Envie este token para o cliente configurar na API.</p>
+                    <p><i class="fas fa-exclamation-triangle"></i> Este token será exibido apenas uma vez!</p>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-primary" onclick="closeModal('tokenModal')">
+                    Entendi
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
