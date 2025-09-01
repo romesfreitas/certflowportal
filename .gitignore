@@ -1,0 +1,18 @@
+# Arquivos temporários
+*.tmp
+*~
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Dependências
+node_modules/
+
+# Configurações locais
+.env
+.env.local
+
+# Arquivos do Windows
+desktop.ini
