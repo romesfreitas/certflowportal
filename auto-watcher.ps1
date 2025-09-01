@@ -1,6 +1,9 @@
 # 👀 File Watcher - Deploy Automático quando arquivos mudarem
 # Monitora alterações e faz deploy automaticamente
 
+# Adicionar Git ao PATH se necessário
+$env:PATH += ";C:\Program Files\Git\bin"
+
 Write-Host "=== CERTFLOW PORTAL - AUTO WATCHER ===" -ForegroundColor Cyan
 Write-Host "👀 Monitorando mudanças nos arquivos do portal..." -ForegroundColor Yellow
 Write-Host "🚀 Deploy automático será executado quando detectar alterações" -ForegroundColor Green

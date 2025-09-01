@@ -63,7 +63,8 @@ try {
     Write-Host "🌐 Site será atualizado em: https://romesfreitas.github.io/certflowportal/" -ForegroundColor Cyan
     Write-Host "⏱️  Aguarde 1-2 minutos para propagação do GitHub Pages" -ForegroundColor Yellow
 
-} catch {
+}
+catch {
     Write-Host ""
     Write-Host "❌ ERRO DURANTE DEPLOY:" -ForegroundColor Red
     Write-Host $_.Exception.Message -ForegroundColor Red

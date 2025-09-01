@@ -1,5 +1,8 @@
 # 🔧 Configuração Inicial do Git para Deploy Automático
 
+# Adicionar Git ao PATH se necessário
+$env:PATH += ";C:\Program Files\Git\bin"
+
 Write-Host "=== CONFIGURAÇÃO GIT - CERTFLOW PORTAL ===" -ForegroundColor Cyan
 Write-Host ""
 
